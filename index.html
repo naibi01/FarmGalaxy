@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmGalaxy Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'farm-green': '#4CAF50',
+                        'farm-blue': '#2196F3',
+                        'farm-yellow': '#FFC107',
+                        'farm-orange': '#FF9800',
+                        'farm-red': '#F44336',
+                        'farm-dark': '#1A237E',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .status-high { background-color: #4CAF50; }
+        .status-medium { background-color: #FFC107; }
+        .status-low { background-color: #F44336; }
+        .bg-farm-gradient {
+            background: linear-gradient(135deg, #1A237E 0%, #4CAF50 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .mobile-flex-col {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Background Animation -->
+    <div id="vanta-globe" class="fixed top-0 left-0 w-full h-full z-0 opacity-20"></div>
+
+    <!-- Main Content -->
+    <div class="relative z-10 min-h-screen">
+        <!-- Header -->
+        <header class="bg-farm-gradient text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i data-feather="sun" class="w-8 h-8"></i>
+                        <h1 class="text-2xl font-bold">FarmGalaxy</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-white text-farm-dark px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                            <i data-feather="user" class="inline mr-2"></i> Farmer Login
+                        </button>
+                        <button class="text-white hover:text-gray-200">
+                            <i data-feather="menu" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-sm">
+                    <i data-feather="map-pin" class="w-4 h-4 mr-1"></i>
+                    <span>Field Location: Kano, Nigeria</span>
+                    <span class="mx-2">|</span>
+                    <i data-feather="clock" class="w-4 h-4 mr-1"></i>
+                    <span>Last updated: 5 minutes ago</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Panel 1: Action Center -->
+        <section class="container mx-auto px-4 py-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <div class="flex flex-col md:flex-row items-center justify-between">
+                        <div class="flex items-center mb-4 md:mb-0">
+                            <div class="status-high rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                                <i data-feather="alert-triangle" class="text-white w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-800">⚠️ IRRIGATION NEEDED</h2>
+                                <p class="text-gray-600">Apply 450 Liters/Hectare in the next 4 hours</p>
+                            </div>
+                        </div>
+                        <div class="bg-farm-green bg-opacity-10 text-farm-green px-4 py-2 rounded-lg">
+                            <div class="flex items-center">
+                                <i data-feather="shield" class="mr-2"></i>
+                                <span>Confidence: High</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                        <div class="p-4">
+                            <div class="flex items-center">
+                                <div class="bg-farm-blue bg-opacity-10 p-2 rounded-lg mr-3">
+                                    <i data-feather="droplet" class="text-farm-blue"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Soil Moisture</p>
+                                    <p class="font-bold">25% <span class="text-farm-red text-sm ml-1">↓ Too Dry</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center">
+                                <div class="bg-farm-yellow bg-opacity-10 p-2 rounded-lg mr-3">
+                                    <i data-feather="thermometer" class="text-farm-yellow"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Temperature</p>
+                                    <p class="font-bold">28°C <span class="text-farm-orange text-sm ml-1">↑ High</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center">
+                                <div class="bg-farm-green bg-opacity-10 p-2 rounded-lg mr-3">
+                                    <i data-feather="bar-chart-2" class="text-farm-green"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Vegetation Health</p>
+                                    <p class="font-bold">0.78 <span class="text-farm-green text-sm ml-1">↑ Healthy</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 2: Data Comparison -->
+        <section class="container mx-auto px-4 py-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="activity" class="mr-2"></i> Field Conditions vs Regional Baseline
+            </h2>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Field</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Region (NASA)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Soil Moisture</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">25%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">32%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-farm-red text-white">↓ Too Dry</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Vegetation Health</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0.78</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-farm-green text-white">↑ Healthy</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Soil pH</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.5</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.2</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300 text-gray-800">↔ Stable</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Temperature</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">28°C</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">26°C</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-farm-orange text-white">↑ High</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 3: Forecasting -->
+        <section class="container mx-auto px-4 py-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="cloud-rain" class="mr-2"></i> 7-Day Rainfall Forecast
+            </h2>
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden p-6">
+                <canvas id="rainfallChart" height="150"></canvas>
+            </div>
+        </section>
+
+        <!-- Sustainability Impact -->
+        <section class="container mx-auto px-4 py-6">
+            <div class="bg-farm-dark text-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center">
+                        <i data-feather="award" class="w-8 h-8 mr-4"></i>
+                        <div>
+                            <h3 class="text-lg font-bold">Sustainability Impact</h3>
+                            <p class="text-sm opacity-80">Potential Water Savings: 30% vs. Traditional Farming</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-12">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <div class="flex items-center">
+                            <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                            <span class="font-bold">FarmGalaxy</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">NASA Space Apps Challenge 2025</p>
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="hover:text-farm-green transition">
+                            <i data-feather="github"></i>
+                        </a>
+                        <a href="#" class="hover:text-farm-green transition">
+                            <i data-feather="twitter"></i>
+                        </a>
+                        <a href="#" class="hover:text-farm-green transition">
+                            <i data-feather="mail"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Vanta.js globe background
+        VANTA.GLOBE({
+            el: "#vanta-globe",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x4CAF50,
+            backgroundColor: 0xf8fafc,
+            size: 0.8
+        });
+
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Rainfall Chart
+        const rainfallCtx = document.getElementById('rainfallChart').getContext('2d');
+        const rainfallChart = new Chart(rainfallCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Rainfall (mm)',
+                    data: [12, 19, 3, 5, 2, 3, 8],
+                    backgroundColor: '#2196F3',
+                    borderColor: '#1976D2',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Sample function to simulate API call
+        async function fetchFarmData() {
+            // In a real implementation, this would fetch from your backend
+            console.log("Fetching farm data...");
+            // Simulate delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return {
+                soilMoisture: 25,
+                soilPH: 6.5,
+                temperature: 28,
+                recommendation: "Irrigate",
+                amount: "450L/Hectare",
+                confidence: "High"
+            };
+        }
+
+        // You would call this periodically in a real app
+        fetchFarmData().then(data => {
+            console.log("Farm data received:", data);
+        });
+    </script>
+</body>
+</html>
+
