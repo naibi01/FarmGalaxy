@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmGalaxy Education Game</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .game-card {
+            transition: all 0.3s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .correct-answer {
+            background-color: #4CAF50 !important;
+            color: white !important;
+        }
+        .wrong-answer {
+            background-color: #F44336 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="sun" class="w-8 h-8"></i>
+                    <h1 class="text-2xl font-bold">Farmer Education Game</h1>
+                </div>
+                <a href="index.html" class="bg-white text-green-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i data-feather="arrow-left" class="inline mr-2"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Game Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Game Categories -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Soil Moisture Card -->
+            <a href="soil-moisture-game.html" class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-6">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                            <i data-feather="droplet" class="text-blue-600 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Soil Moisture</h2>
+                    </div>
+                    <p class="mt-4 text-gray-600">Learn about optimal soil moisture levels for different crops and how to measure them.</p>
+                </div>
+            </a>
+            <!-- Temperature Card -->
+            <a href="temperature-game.html" class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-6">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-3 rounded-lg mr-4">
+                            <i data-feather="thermometer" class="text-orange-600 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Temperature</h2>
+                    </div>
+                    <p class="mt-4 text-gray-600">Understand how temperature affects crop growth and seasonal variations.</p>
+                </div>
+            </a>
+            <!-- Vegetation Health Card -->
+            <a href="vegetation-game.html" class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-6">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-lg mr-4">
+                            <i data-feather="bar-chart-2" class="text-green-600 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Vegetation Health</h2>
+                    </div>
+                    <p class="mt-4 text-gray-600">Learn to identify healthy vs. unhealthy crops and common problems.</p>
+                </div>
+            </a>
+            <!-- Weather Patterns Card -->
+            <a href="weather-game.html" class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-6">
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 p-3 rounded-lg mr-4">
+                            <i data-feather="cloud-rain" class="text-purple-600 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Weather Patterns</h2>
+                    </div>
+                    <p class="mt-4 text-gray-600">Understand how weather affects farming and how to prepare.</p>
+                </div>
+            </a>
+            <!-- Seasonal Needs Card -->
+            <a href="seasonal-game.html" class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-6">
+                    <div class="flex items-center">
+                        <div class="bg-yellow-100 p-3 rounded-lg mr-4">
+                            <i data-feather="calendar" class="text-yellow-600 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Seasonal Needs</h2>
+                    </div>
+                    <p class="mt-4 text-gray-600">Learn about crop rotation, planting seasons, and seasonal care.</p>
+                </div>
+            </a>
+            <!-- Crop Types Card -->
+            <a href="crops-game.html" class="game-card bg-white rounded-xl shadow-lg overflow-hidden">
+<div class="p-6">
+                    <div class="flex items-center">
+                        <div class="bg-red-100 p-3 rounded-lg mr-4">
+                            <i data-feather="layers" class="text-red-600 w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Crop Types</h2>
+                    </div>
+                    <p class="mt-4 text-gray-600">Discover different crops and their specific needs.</p>
+                </div>
+            </a>
+</div>
+<!-- Resources Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="book-open" class="mr-2"></i> Learning Resources
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold text-lg mb-2">FAO Farming Guide</h3>
+                    <p class="text-gray-600 mb-3">Comprehensive guide to sustainable farming practices from the Food and Agriculture Organization.</p>
+                    <a href="https://www.fao.org/publications/en/" target="_blank" class="text-green-600 hover:underline inline-flex items-center">
+                        Read More <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold text-lg mb-2">Climate-Smart Agriculture</h3>
+                    <p class="text-gray-600 mb-3">Learn how to adapt your farming to climate change and extreme weather.</p>
+                    <a href="https://climateknowledgeportal.worldbank.org/" target="_blank" class="text-green-600 hover:underline inline-flex items-center">
+                        Explore <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                        <span class="font-bold">FarmGalaxy Education</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Empowering farmers through knowledge</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-green-400 transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="hover:text-green-400 transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="hover:text-green-400 transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+</script>
+</body>
+</html>

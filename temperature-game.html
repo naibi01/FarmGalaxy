@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Game | FarmGalaxy</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .flashcard {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .answer-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .answer-btn.wrong {
+            background-color: #F44336;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-orange-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="thermometer" class="w-8 h-8"></i>
+                    <h1 class="text-2xl font-bold">Temperature Game</h1>
+                </div>
+                <a href="game.html" class="bg-white text-orange-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i data-feather="arrow-left" class="inline mr-2"></i> Back to Games
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Game Mode Selector -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow p-1 inline-flex">
+                <button id="flashcard-mode-btn" class="px-4 py-2 rounded-md font-medium bg-orange-600 text-white">Flashcards</button>
+                <button id="quiz-mode-btn" class="px-4 py-2 rounded-md font-medium text-gray-700 hover:bg-gray-100">Quiz</button>
+            </div>
+        </div>
+
+        <!-- Flashcard Section -->
+        <div id="flashcard-section" class="mb-12">
+            <div class="max-w-md mx-auto">
+                <div class="flashcard bg-white rounded-xl shadow-lg overflow-hidden h-64 cursor-pointer mx-auto" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner h-full w-full relative">
+                        <div class="flashcard-front h-full w-full flex items-center justify-center p-6 absolute">
+                            <h3 class="text-xl font-bold text-center">What is the ideal temperature range for most crops?</h3>
+                        </div>
+                        <div class="flashcard-back h-full w-full flex items-center justify-center p-6 bg-orange-50 absolute">
+                            <p class="text-center">Most crops grow best between 15-30°C (59-86°F). Some have specific ranges.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                        <i data-feather="chevron-left"></i> Previous
+                    </button>
+                    <span class="self-center text-gray-600">1/10</span>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                        Next <i data-feather="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section (Hidden by default) -->
+        <div id="quiz-section" class="hidden bg-white rounded-xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Question 1 of 10</h2>
+                <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">Score: 0</span>
+            </div>
+            
+            <div class="text-lg mb-6">What happens to plants when temperatures drop below freezing?</div>
+            
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">They grow faster</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">They become dormant</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Cell walls can rupture</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Their color changes</button>
+            </div>
+            
+            <div class="text-sm text-gray-500 mb-4 hidden" id="explanation">Freezing temperatures can cause ice crystals to form inside plant cells, rupturing cell walls and damaging tissues.</div>
+            
+            <button class="bg-orange-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-orange-700 transition disabled:opacity-50" disabled>
+                Next Question <i data-feather="arrow-right" class="inline ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Learning Resources -->
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="book-open" class="mr-2"></i> Temperature Resources
+            </h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">USDA Plant Hardiness Zones</h3>
+                    <p class="text-gray-600 mb-3">Learn about temperature zones and suitable plants.</p>
+                    <a href="https://planthardiness.ars.usda.gov/" target="_blank" class="text-orange-600 hover:underline inline-flex items-center">
+                        View Zones <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">Temperature Effects on Crops</h3>
+                    <p class="text-gray-600 mb-3">Scientific paper on temperature impacts.</p>
+                    <a href="https://www.sciencedirect.com/science/article/pii/S0168192316302198" target="_blank" class="text-orange-600 hover:underline inline-flex items-center">
+                        Read Study <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                        <span class="font-bold">FarmGalaxy</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Empowering farmers through knowledge</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-orange-400 transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="hover:text-orange-400 transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="hover:text-orange-400 transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+        
+        // Game mode toggle
+        const flashcardBtn = document.getElementById('flashcard-mode-btn');
+        const quizBtn = document.getElementById('quiz-mode-btn');
+        const flashcardSection = document.getElementById('flashcard-section');
+        const quizSection = document.getElementById('quiz-section');
+
+        flashcardBtn.addEventListener('click', () => {
+            flashcardSection.classList.remove('hidden');
+            quizSection.classList.add('hidden');
+            flashcardBtn.classList.add('bg-orange-600', 'text-white');
+            flashcardBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.remove('bg-orange-600', 'text-white');
+        });
+
+        quizBtn.addEventListener('click', () => {
+            quizSection.classList.remove('hidden');
+            flashcardSection.classList.add('hidden');
+            quizBtn.classList.add('bg-orange-600', 'text-white');
+            quizBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.remove('bg-orange-600', 'text-white');
+        });
+        // Quiz questions and logic
+        const quizQuestions = [
+            {
+                question: "What happens to plants when temperatures drop below freezing?",
+                options: ["They grow faster", "They become dormant", "Cell walls can rupture", "Their color changes"],
+                answer: "Cell walls can rupture",
+                explanation: "Freezing temperatures can cause ice crystals to form inside plant cells, rupturing cell walls and damaging tissues."
+            },
+            {
+                question: "What is the ideal daytime temperature for tomato growth?",
+                options: ["10-15°C", "20-25°C", "30-35°C", "40-45°C"],
+                answer: "20-25°C",
+                explanation: "Tomatoes grow best with daytime temperatures between 20-25°C (68-77°F)."
+            }
+        ];
+let currentQuestion = 0;
+        let quizScore = 0;
+
+        function showQuestion(index) {
+            const q = quizQuestions[index];
+            document.querySelector('#quiz-section h2:first-of-type').textContent = `Question ${index + 1} of ${quizQuestions.length}`;
+            document.querySelector('#quiz-section .text-lg').textContent = q.question;
+            
+            const options = document.querySelectorAll('.answer-btn');
+            options.forEach((btn, i) => {
+                btn.textContent = q.options[i];
+                btn.classList.remove('correct', 'wrong');
+                btn.disabled = false;
+            });
+            
+            document.getElementById('explanation').textContent = q.explanation;
+            document.getElementById('explanation').classList.add('hidden');
+            document.querySelector('#quiz-section button:last-of-type').disabled = true;
+        }
+
+        // Answer button functionality
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const currentQuiz = quizQuestions[currentQuestion];
+                if (this.textContent === currentQuiz.answer) {
+                    this.classList.add('correct');
+                    quizScore++;
+                    document.querySelector('.bg-orange-100').textContent = `Score: ${quizScore}`;
+                } else {
+                    this.classList.add('wrong');
+                    document.querySelectorAll('.answer-btn').forEach(b => {
+                        if (b.textContent === currentQuiz.answer) b.classList.add('correct');
+                    });
+                }
+                
+                document.getElementById('explanation').classList.remove('hidden');
+                document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+                document.querySelector('#quiz-section button:last-of-type').disabled = false;
+            });
+        });
+        // Next question button functionality
+        document.querySelector('#quiz-section button:last-of-type').addEventListener('click', () => {
+            currentQuestion = (currentQuestion + 1) % quizQuestions.length;
+            quizScore = 0;
+            document.querySelector('.bg-orange-100').textContent = 'Score: 0';
+            showQuestion(currentQuestion);
+            document.querySelector('#quiz-section button:last-of-type').disabled = true;
+        });
+// Initialize first question
+        showQuestion(currentQuestion);
+</script>
+</body>
+</html>

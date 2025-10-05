@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Types Game | FarmGalaxy</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .flashcard {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .answer-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .answer-btn.wrong {
+            background-color: #F44336;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-red-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="layers" class="w-8 h-8"></i>
+                    <h1 class="text-2xl font-bold">Crop Types Game</h1>
+                </div>
+                <a href="game.html" class="bg-white text-red-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i data-feather="arrow-left" class="inline mr-2"></i> Back to Games
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Game Mode Selector -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow p-1 inline-flex">
+                <button id="flashcard-mode-btn" class="px-4 py-2 rounded-md font-medium bg-red-600 text-white">Flashcards</button>
+                <button id="quiz-mode-btn" class="px-4 py-2 rounded-md font-medium text-gray-700 hover:bg-gray-100">Quiz</button>
+            </div>
+        </div>
+
+        <!-- Flashcard Section -->
+        <div id="flashcard-section" class="mb-12">
+            <div class="max-w-md mx-auto">
+                <div class="flashcard bg-white rounded-xl shadow-lg overflow-hidden h-64 cursor-pointer mx-auto" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner h-full w-full relative">
+                        <div class="flashcard-front h-full w-full flex items-center justify-center p-6 absolute">
+                            <h3 class="text-xl font-bold text-center">What type of crop requires the most water per kilogram produced?</h3>
+                        </div>
+                        <div class="flashcard-back h-full w-full flex items-center justify-center p-6 bg-red-50 absolute">
+                            <p class="text-center">Rice requires about 2,500 liters of water per kilogram, more than most other staple crops.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                        <i data-feather="chevron-left"></i> Previous
+                    </button>
+                    <span class="self-center text-gray-600">1/10</span>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                        Next <i data-feather="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section (Hidden by default) -->
+        <div id="quiz-section" class="hidden bg-white rounded-xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Question 1 of 10</h2>
+                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">Score: 0</span>
+            </div>
+            
+            <div class="text-lg mb-6">Which crop is known as a "nitrogen fixer" that improves soil fertility?</div>
+            
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Wheat</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Corn</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Soybeans</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Rice</button>
+            </div>
+            
+            <div class="text-sm text-gray-500 mb-4 hidden" id="explanation">Legumes like soybeans form symbiotic relationships with nitrogen-fixing bacteria in root nodules, enriching soil nitrogen.</div>
+            
+            <button class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition disabled:opacity-50" disabled>
+                Next Question <i data-feather="arrow-right" class="inline ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Learning Resources -->
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="book-open" class="mr-2"></i> Crop Resources
+            </h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">FAO Crop Production</h3>
+                    <p class="text-gray-600 mb-3">Comprehensive information on different crop types.</p>
+                    <a href="https://www.fao.org/land-water/databases-and-software/crop-information/en/" target="_blank" class="text-red-600 hover:underline inline-flex items-center">
+                        View Guide <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">Crop Water Requirements</h3>
+                    <p class="text-gray-600 mb-3">Detailed data on water needs for different crops.</p>
+                    <a href="https://www.fao.org/3/s2022e/s2022e07.htm" target="_blank" class="text-red-600 hover:underline inline-flex items-center">
+                        Read Study <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                        <span class="font-bold">FarmGalaxy</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Empowering farmers through knowledge</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-red-400 transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="hover:text-red-400 transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="hover:text-red-400 transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+        
+        // Game mode toggle
+        const flashcardBtn = document.getElementById('flashcard-mode-btn');
+        const quizBtn = document.getElementById('quiz-mode-btn');
+        const flashcardSection = document.getElementById('flashcard-section');
+        const quizSection = document.getElementById('quiz-section');
+
+        flashcardBtn.addEventListener('click', () => {
+            flashcardSection.classList.remove('hidden');
+            quizSection.classList.add('hidden');
+            flashcardBtn.classList.add('bg-red-600', 'text-white');
+            flashcardBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.remove('bg-red-600', 'text-white');
+        });
+
+        quizBtn.addEventListener('click', () => {
+            quizSection.classList.remove('hidden');
+            flashcardSection.classList.add('hidden');
+            quizBtn.classList.add('bg-red-600', 'text-white');
+            quizBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.remove('bg-red-600', 'text-white');
+        });
+
+        // Quiz functionality
+        const answerBtns = document.querySelectorAll('.answer-btn');
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent === 'Soybeans') {
+                    this.classList.add('correct');
+                } else {
+                    this.classList.add('wrong');
+                    answerBtns.forEach(b => {
+                        if (b.textContent === 'Soybeans') b.classList.add('correct');
+                    });
+                }
+                
+                document.getElementById('explanation').classList.remove('hidden');
+                answerBtns.forEach(b => b.disabled = true);
+            });
+        });
+    </script>
+</body>
+</html>

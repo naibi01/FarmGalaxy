@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Moisture Game | FarmGalaxy</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .flashcard {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .answer-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .answer-btn.wrong {
+            background-color: #F44336;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="droplet" class="w-8 h-8"></i>
+                    <h1 class="text-2xl font-bold">Soil Moisture Game</h1>
+                </div>
+                <a href="game.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i data-feather="arrow-left" class="inline mr-2"></i> Back to Games
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Game Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Game Mode Selector -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow p-1 inline-flex">
+                <button id="flashcard-mode-btn" class="px-4 py-2 rounded-md font-medium bg-blue-600 text-white">Flashcards</button>
+                <button id="quiz-mode-btn" class="px-4 py-2 rounded-md font-medium text-gray-700 hover:bg-gray-100">Quiz</button>
+            </div>
+        </div>
+
+        <!-- Flashcard Section -->
+        <div id="flashcard-section" class="mb-12">
+            <div class="max-w-md mx-auto">
+                <div class="flashcard bg-white rounded-xl shadow-lg overflow-hidden h-64 cursor-pointer mx-auto" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner h-full w-full relative">
+                        <div class="flashcard-front h-full w-full flex items-center justify-center p-6 absolute">
+                            <h3 class="text-xl font-bold text-center">What is the ideal soil moisture range for most crops?</h3>
+                        </div>
+                        <div class="flashcard-back h-full w-full flex items-center justify-center p-6 bg-blue-50 absolute">
+                            <p class="text-center">Most crops thrive in 30-50% soil moisture. Too dry and plants can't absorb nutrients, too wet and roots may rot.</p>
+                        </div>
+</div>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <button id="prev-card" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                        <i data-feather="chevron-left"></i> Previous
+                    </button>
+                    <span class="self-center text-gray-600">1/10</span>
+                    <button id="next-card" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                        Next <i data-feather="chevron-right"></i>
+                    </button>
+                </div>
+</div>
+        </div>
+
+        <!-- Quiz Section (Hidden by default) -->
+        <div id="quiz-section" class="hidden bg-white rounded-xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Question 1 of 5</h2>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">Score: 0</span>
+            </div>
+            <div class="text-lg mb-6">Which tool is commonly used to measure soil moisture?</div>
+            
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Thermometer</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Tensiometer</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Barometer</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Anemometer</button>
+            </div>
+            
+            <div class="text-sm text-gray-500 mb-4 hidden" id="explanation">A tensiometer measures soil moisture tension, indicating how hard plants must work to extract water.</div>
+<button id="next-quiz-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50" disabled>
+                Next Question <i data-feather="arrow-right" class="inline ml-2"></i>
+            </button>
+</div>
+
+        <!-- Learning Resources -->
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="book-open" class="mr-2"></i> Soil Moisture Resources
+            </h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">FAO Soil Moisture Guide</h3>
+                    <p class="text-gray-600 mb-3">Learn how to measure and maintain optimal soil moisture levels.</p>
+                    <a href="https://www.fao.org/soils-portal/soil-moisture/en/" target="_blank" class="text-blue-600 hover:underline inline-flex items-center">
+                        Read Guide <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">Soil Moisture Monitoring Techniques</h3>
+                    <p class="text-gray-600 mb-3">Video tutorial on different methods to measure soil moisture.</p>
+                    <a href="https://youtube.com/watch?v=example" target="_blank" class="text-blue-600 hover:underline inline-flex items-center">
+                        Watch Video <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                        <span class="font-bold">FarmGalaxy</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Empowering farmers through knowledge</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-blue-400 transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="hover:text-blue-400 transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="hover:text-blue-400 transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Game mode toggle
+        const flashcardBtn = document.getElementById('flashcard-mode-btn');
+        const quizBtn = document.getElementById('quiz-mode-btn');
+        const flashcardSection = document.getElementById('flashcard-section');
+        const quizSection = document.getElementById('quiz-section');
+
+        flashcardBtn.addEventListener('click', () => {
+            flashcardSection.classList.remove('hidden');
+            quizSection.classList.add('hidden');
+            flashcardBtn.classList.add('bg-blue-600', 'text-white');
+            flashcardBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.remove('bg-blue-600', 'text-white');
+        });
+
+        quizBtn.addEventListener('click', () => {
+            quizSection.classList.remove('hidden');
+            flashcardSection.classList.add('hidden');
+            quizBtn.classList.add('bg-blue-600', 'text-white');
+            quizBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.remove('bg-blue-600', 'text-white');
+        });
+        const flashcards = [
+            {
+                question: "What is the ideal soil moisture range for most crops?",
+                answer: "Most crops thrive in 30-50% soil moisture. Too dry and plants can't absorb nutrients, too wet and roots may rot."
+            },
+            {
+                question: "What does a tensiometer measure?",
+                answer: "A tensiometer measures soil moisture tension, indicating how hard plants must work to extract water."
+            },
+            {
+                question: "What is field capacity?",
+                answer: "Field capacity is the amount of soil moisture held in soil after excess water has drained away."
+            },
+            {
+                question: "What is the wilting point?",
+                answer: "The wilting point is when soil moisture is too low for plants to extract water, causing permanent wilting."
+            },
+            {
+                question: "How does clay soil affect moisture retention?",
+                answer: "Clay soil retains more moisture than sandy soil but drains slower and may become waterlogged."
+            },
+            {
+                question: "What is the best time of day to measure soil moisture?",
+                answer: "Early morning is best, as evaporation is minimal and readings reflect true soil moisture."
+            },
+            {
+                question: "How does organic matter affect soil moisture?",
+                answer: "Organic matter improves water retention in sandy soils and drainage in clay soils."
+            },
+            {
+                question: "What are signs of overwatered plants?",
+                answer: "Yellowing leaves, root rot, fungal growth, and a foul smell from soil indicate overwatering."
+            },
+            {
+                question: "What irrigation method conserves the most water?",
+                answer: "Drip irrigation delivers water directly to roots with minimal evaporation or runoff."
+            },
+            {
+                question: "How does mulch affect soil moisture?",
+                answer: "Mulch reduces evaporation, maintains consistent moisture, and regulates soil temperature."
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                question: "Which tool is commonly used to measure soil moisture?",
+                options: ["Thermometer", "Tensiometer", "Barometer", "Anemometer"],
+                answer: "Tensiometer",
+                explanation: "A tensiometer measures soil moisture tension, indicating how hard plants must work to extract water."
+            },
+            {
+                question: "What soil type drains water the fastest?",
+                options: ["Clay", "Silt", "Loam", "Sand"],
+                answer: "Sand",
+                explanation: "Sandy soil has large particles and drains quickly but retains little moisture."
+            },
+            {
+                question: "What is the best soil moisture level for planting seeds?",
+                options: ["Bone dry", "10-20%", "50-70%", "Saturated"],
+                answer: "50-70%",
+                explanation: "Seeds need adequate moisture to germinate but not so much that they rot."
+            },
+            {
+                question: "Which crop is most tolerant of waterlogged soil?",
+                options: ["Wheat", "Rice", "Corn", "Tomatoes"],
+                answer: "Rice",
+                explanation: "Rice is uniquely adapted to grow in flooded paddies."
+            },
+            {
+                question: "What happens to plants in waterlogged soil?",
+                options: ["They grow faster", "Roots suffocate", "Leaves turn purple", "They fruit earlier"],
+                answer: "Roots suffocate",
+                explanation: "Waterlogged soil lacks oxygen, causing roots to suffocate and die."
+            },
+            {
+                question: "What is the primary purpose of a rain gauge?",
+                options: ["Measure soil pH", "Record rainfall", "Test water purity", "Measure leaf wetness"],
+                answer: "Record rainfall",
+                explanation: "Rain gauges measure precipitation to help determine irrigation needs."
+            },
+            {
+                question: "Which irrigation method is most efficient for row crops?",
+                options: ["Sprinklers", "Flood irrigation", "Drip tape", "Hand watering"],
+                answer: "Drip tape",
+                explanation: "Drip tape delivers water directly to plant roots with minimal waste."
+            },
+            {
+                question: "What does 'permanent wilting point' mean?",
+                options: ["Plant can recover with watering", "Plant can't recover even if watered", "Soil is at field capacity", "Soil is completely dry"],
+                answer: "Plant can't recover even if watered",
+                explanation: "At permanent wilting point, plants have sustained irreversible damage."
+            },
+            {
+                question: "How often should you check soil moisture?",
+                options: ["Once a season", "Weekly", "Daily", "Depends on weather and soil"],
+                answer: "Depends on weather and soil",
+                explanation: "Checking frequency varies based on temperature, rainfall, and soil type."
+            },
+            {
+                question: "Which practice helps conserve soil moisture?",
+                options: ["Tilling frequently", "Leaving soil bare", "Adding organic matter", "Watering at noon"],
+                answer: "Adding organic matter",
+                explanation: "Organic matter improves soil structure and water retention."
+            }
+        ];
+
+        let currentCard = 0;
+        let quizScore = 0;
+        let currentQuestion = 0;
+
+        // Initialize flashcards
+        function showCard(index) {
+            const card = document.querySelector('.flashcard');
+            card.classList.remove('flipped');
+            const front = card.querySelector('.flashcard-front');
+            const back = card.querySelector('.flashcard-back');
+            front.innerHTML = `<h3 class="text-xl font-bold text-center">${flashcards[index].question}</h3>`;
+            back.innerHTML = `<p class="text-center">${flashcards[index].answer}</p>`;
+            document.querySelector('.self-center').textContent = `${index + 1}/${flashcards.length}`;
+        }
+
+        // Previous/Next buttons
+        document.getElementById('prev-card').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            showCard(currentCard);
+        });
+
+        document.getElementById('next-card').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentCard = (currentCard + 1) % flashcards.length;
+            showCard(currentCard);
+        });
+// Quiz functionality
+        function showQuestion(index) {
+            const q = quizQuestions[index];
+            document.querySelector('#quiz-section h2:first-of-type').textContent = `Question ${index + 1} of ${quizQuestions.length}`;
+            document.querySelector('#quiz-section .text-lg').textContent = q.question;
+            
+            const options = document.querySelectorAll('.answer-btn');
+            options.forEach((btn, i) => {
+                btn.textContent = q.options[i];
+                btn.classList.remove('correct', 'wrong');
+                btn.disabled = false;
+            });
+            
+            document.getElementById('explanation').textContent = q.explanation;
+            document.getElementById('explanation').classList.add('hidden');
+                nextQuizBtn.disabled = true;
+}
+
+        const answerBtns = document.querySelectorAll('.answer-btn');
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const currentQuiz = quizQuestions[currentQuestion];
+                if (this.textContent === currentQuiz.answer) {
+                    this.classList.add('correct');
+                    quizScore++;
+                    document.querySelector('.bg-blue-100').textContent = `Score: ${quizScore}`;
+                } else {
+                    this.classList.add('wrong');
+                    answerBtns.forEach(b => {
+                        if (b.textContent === currentQuiz.answer) b.classList.add('correct');
+                    });
+                }
+                
+                document.getElementById('explanation').classList.remove('hidden');
+                answerBtns.forEach(b => b.disabled = true);
+                nextQuizBtn.disabled = false;
+});
+        });
+        const nextQuizBtn = document.getElementById('next-quiz-btn');
+        nextQuizBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentQuestion++;
+            if (currentQuestion < quizQuestions.length) {
+                showQuestion(currentQuestion);
+            } else {
+                // Quiz completed
+                alert(`Quiz completed! Your score: ${quizScore}/${quizQuestions.length}`);
+                currentQuestion = 0;
+                quizScore = 0;
+                document.querySelector('.bg-blue-100').textContent = 'Score: 0';
+                showQuestion(currentQuestion);
+            }
+        });
+// Initialize
+        showCard(currentCard);
+        showQuestion(currentQuestion);
+        // Next question button functionality
+        document.querySelector('#quiz-section button:last-of-type').addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion < quizQuestions.length) {
+                showQuestion(currentQuestion);
+                document.querySelector('#quiz-section button:last-of-type').disabled = true;
+            } else {
+                // Quiz completed
+                alert(`Quiz completed! Your score: ${quizScore}/${quizQuestions.length}`);
+                currentQuestion = 0;
+                quizScore = 0;
+                document.querySelector('.bg-blue-100').textContent = 'Score: 0';
+                showQuestion(currentQuestion);
+            }
+        });
+// Flashcard navigation
+        document.querySelectorAll('#flashcard-section button').forEach((btn, i) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (i === 0) {
+                    currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+                } else {
+                    currentCard = (currentCard + 1) % flashcards.length;
+                }
+                showCard(currentCard);
+            });
+        });
+</script>
+</body>
+</html>

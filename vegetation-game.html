@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegetation Health Game | FarmGalaxy</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .flashcard {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .answer-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .answer-btn.wrong {
+            background-color: #F44336;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="bar-chart-2" class="w-8 h-8"></i>
+                    <h1 class="text-2xl font-bold">Vegetation Health Game</h1>
+                </div>
+                <a href="game.html" class="bg-white text-green-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i data-feather="arrow-left" class="inline mr-2"></i> Back to Games
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Game Mode Selector -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow p-1 inline-flex">
+                <button id="flashcard-mode-btn" class="px-4 py-2 rounded-md font-medium bg-green-600 text-white">Flashcards</button>
+                <button id="quiz-mode-btn" class="px-4 py-2 rounded-md font-medium text-gray-700 hover:bg-gray-100">Quiz</button>
+            </div>
+        </div>
+
+        <!-- Flashcard Section -->
+        <div id="flashcard-section" class="mb-12">
+            <div class="max-w-md mx-auto">
+                <div class="flashcard bg-white rounded-xl shadow-lg overflow-hidden h-64 cursor-pointer mx-auto" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner h-full w-full relative">
+                        <div class="flashcard-front h-full w-full flex items-center justify-center p-6 absolute">
+                            <h3 class="text-xl font-bold text-center">What NDVI value indicates healthy vegetation?</h3>
+                        </div>
+                        <div class="flashcard-back h-full w-full flex items-center justify-center p-6 bg-green-50 absolute">
+                            <p class="text-center">NDVI values between 0.3-0.6 indicate moderate vegetation, while 0.6-0.9 indicates dense healthy vegetation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <button id="prev-card" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                        <i data-feather="chevron-left"></i> Previous
+                    </button>
+                    <span class="self-center text-gray-600">1/10</span>
+                    <button id="next-card" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                        Next <i data-feather="chevron-right"></i>
+                    </button>
+                </div>
+</div>
+        </div>
+
+        <!-- Quiz Section (Hidden by default) -->
+        <div id="quiz-section" class="hidden bg-white rounded-xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Question 1 of 10</h2>
+                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Score: 0</span>
+            </div>
+            
+            <div class="text-lg mb-6">What is the first visible sign of nitrogen deficiency in plants?</div>
+            
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Yellowing of older leaves</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Stunted growth</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Brown leaf edges</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Purple stems</button>
+            </div>
+            
+            <div class="text-sm text-gray-500 mb-4 hidden" id="explanation">Nitrogen is mobile in plants, so deficiencies appear first in older leaves as the nutrient is relocated to new growth.</div>
+            <button id="next-quiz-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition disabled:opacity-50" disabled>
+                Next Question <i data-feather="arrow-right" class="inline ml-2"></i>
+            </button>
+</div>
+
+        <!-- Learning Resources -->
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="book-open" class="mr-2"></i> Vegetation Resources
+            </h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">FAO Crop Health Monitoring</h3>
+                    <p class="text-gray-600 mb-3">Guide to identifying and managing plant health issues.</p>
+                    <a href="https://www.fao.org/agriculture/crops/thematic-sitemap/theme/pests/en/" target="_blank" class="text-green-600 hover:underline inline-flex items-center">
+                        Read Guide <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">NDVI Explained</h3>
+                    <p class="text-gray-600 mb-3">Understanding vegetation indices for crop monitoring.</p>
+                    <a href="https://eos.com/make-an-analysis/ndvi/" target="_blank" class="text-green-600 hover:underline inline-flex items-center">
+                        Learn More <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                        <span class="font-bold">FarmGalaxy</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Empowering farmers through knowledge</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-green-400 transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="hover:text-green-400 transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="hover:text-green-400 transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        feather.replace();
+
+        const flashcards = [
+            {
+                question: "What NDVI value indicates healthy vegetation?",
+                answer: "NDVI values between 0.3-0.6 indicate moderate vegetation, while 0.6-0.9 indicates dense healthy vegetation."
+            },
+            {
+                question: "What is the first visible sign of nitrogen deficiency in plants?",
+                answer: "Yellowing of older leaves, as nitrogen is mobile and relocated to new growth first."
+            },
+            {
+                question: "What does EVI improve over NDVI?",
+                answer: "EVI (Enhanced Vegetation Index) reduces atmospheric and canopy background noise."
+            },
+            {
+                question: "What plant pigment primarily absorbs light for photosynthesis?",
+                answer: "Chlorophyll absorbs red and blue light, reflecting green light."
+            },
+            {
+                question: "What does LAI (Leaf Area Index) measure?",
+                answer: "LAI measures the total one-sided leaf area per unit ground surface area."
+            },
+            {
+                question: "What is photochemical reflectance index (PRI) used for?",
+                answer: "PRI detects light use efficiency and photosynthetic activity changes."
+            },
+            {
+                question: "What causes purple coloration in plant leaves?",
+                answer: "Purple leaves often indicate phosphorus deficiency or anthocyanin pigments."
+            },
+            {
+                question: "What is the ideal NDVI range for most crops?",
+                answer: "Most healthy crops have NDVI values between 0.7-0.9 during peak growing season."
+            },
+            {
+                question: "What does a low NDVI value (<0.2) indicate?",
+                answer: "Values below 0.2 typically indicate bare soil, rocks, or dead vegetation."
+            },
+            {
+                question: "How does water stress affect NDVI?",
+                answer: "Water stress reduces NDVI as plants close stomata and reduce leaf area."
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                question: "What is the first visible sign of nitrogen deficiency in plants?",
+                options: ["Yellowing of older leaves", "Stunted growth", "Brown leaf edges", "Purple stems"],
+                answer: "Yellowing of older leaves",
+                explanation: "Nitrogen is mobile in plants, so deficiencies appear first in older leaves."
+            },
+            {
+                question: "What NDVI value indicates bare soil?",
+                options: ["0.9-1.0", "0.6-0.8", "0.3-0.5", "<0.2"],
+                answer: "<0.2",
+                explanation: "NDVI values below 0.2 typically indicate bare soil or dead vegetation."
+            },
+            {
+                question: "Which pigment reflects near-infrared light?",
+                options: ["Chlorophyll", "Carotenoids", "Leaf structure", "Xanthophylls"],
+                answer: "Leaf structure",
+                explanation: "Healthy plant cell structure reflects near-infrared light strongly."
+            },
+            {
+                question: "What causes interveinal chlorosis?",
+                options: ["Nitrogen deficiency", "Iron deficiency", "Potassium deficiency", "Phosphorus deficiency"],
+                answer: "Iron deficiency",
+                explanation: "Iron deficiency causes yellowing between leaf veins while veins remain green."
+            },
+            {
+                question: "What does EVI correct for that NDVI doesn't?",
+                options: ["Soil background", "Atmospheric effects", "Canopy background", "All of the above"],
+                answer: "All of the above",
+                explanation: "EVI improves on NDVI by accounting for these factors in dense vegetation."
+            }
+        ];
+
+        let currentCard = 0;
+        let quizScore = 0;
+        let currentQuestion = 0;
+
+        function showCard(index) {
+            const card = document.querySelector('.flashcard');
+            card.classList.remove('flipped');
+            const front = card.querySelector('.flashcard-front');
+            const back = card.querySelector('.flashcard-back');
+            front.innerHTML = `<h3 class="text-xl font-bold text-center">${flashcards[index].question}</h3>`;
+            back.innerHTML = `<p class="text-center">${flashcards[index].answer}</p>`;
+            document.querySelector('#flashcard-section .self-center').textContent = `${index + 1}/${flashcards.length}`;
+        }
+
+        function showQuestion(index) {
+            const q = quizQuestions[index];
+            document.querySelector('#quiz-section h2:first-of-type').textContent = `Question ${index + 1} of ${quizQuestions.length}`;
+            document.querySelector('#quiz-section .text-lg').textContent = q.question;
+            
+            const options = document.querySelectorAll('.answer-btn');
+            options.forEach((btn, i) => {
+                btn.textContent = q.options[i];
+                btn.classList.remove('correct', 'wrong');
+                btn.disabled = false;
+            });
+            
+            document.getElementById('explanation').textContent = q.explanation;
+            document.getElementById('explanation').classList.add('hidden');
+                nextQuizBtn.disabled = true;
+}
+
+        // Game mode toggle
+const flashcardBtn = document.getElementById('flashcard-mode-btn');
+        const quizBtn = document.getElementById('quiz-mode-btn');
+        const flashcardSection = document.getElementById('flashcard-section');
+        const quizSection = document.getElementById('quiz-section');
+
+        flashcardBtn.addEventListener('click', () => {
+            flashcardSection.classList.remove('hidden');
+            quizSection.classList.add('hidden');
+            flashcardBtn.classList.add('bg-green-600', 'text-white');
+            flashcardBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.remove('bg-green-600', 'text-white');
+        });
+
+        quizBtn.addEventListener('click', () => {
+            quizSection.classList.remove('hidden');
+            flashcardSection.classList.add('hidden');
+            quizBtn.classList.add('bg-green-600', 'text-white');
+            quizBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.remove('bg-green-600', 'text-white');
+        });
+
+        // Quiz functionality
+        const answerBtns = document.querySelectorAll('.answer-btn');
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const currentQuiz = quizQuestions[currentQuestion];
+                if (this.textContent === currentQuiz.answer) {
+                    this.classList.add('correct');
+                    quizScore++;
+                    document.querySelector('.bg-green-100').textContent = `Score: ${quizScore}`;
+                } else {
+                    this.classList.add('wrong');
+                    answerBtns.forEach(b => {
+                        if (b.textContent === currentQuiz.answer) b.classList.add('correct');
+                    });
+                }
+                
+                document.getElementById('explanation').classList.remove('hidden');
+                answerBtns.forEach(b => b.disabled = true);
+                nextQuizBtn.disabled = false;
+});
+        });
+
+        // Quiz next question button
+        const nextQuizBtn = document.getElementById('next-quiz-btn');
+        nextQuizBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentQuestion++;
+            if (currentQuestion < quizQuestions.length) {
+                showQuestion(currentQuestion);
+            } else {
+                // Quiz completed
+                alert(`Quiz completed! Your score: ${quizScore}/${quizQuestions.length}`);
+                currentQuestion = 0;
+                quizScore = 0;
+                document.querySelector('.bg-green-100').textContent = 'Score: 0';
+                showQuestion(currentQuestion);
+            }
+        });
+// Flashcard navigation
+        document.getElementById('prev-card').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            showCard(currentCard);
+        });
+
+        document.getElementById('next-card').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentCard = (currentCard + 1) % flashcards.length;
+            showCard(currentCard);
+        });
+// Initialize
+        showCard(currentCard);
+        showQuestion(currentQuestion);
+</script>
+</body>
+</html>

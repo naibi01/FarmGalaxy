@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Patterns Game | FarmGalaxy</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .flashcard {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .answer-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .answer-btn.wrong {
+            background-color: #F44336;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="cloud-rain" class="w-8 h-8"></i>
+                    <h1 class="text-2xl font-bold">Weather Patterns Game</h1>
+                </div>
+                <a href="game.html" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i data-feather="arrow-left" class="inline mr-2"></i> Back to Games
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Game Mode Selector -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow p-1 inline-flex">
+                <button id="flashcard-mode-btn" class="px-4 py-2 rounded-md font-medium bg-purple-600 text-white">Flashcards</button>
+                <button id="quiz-mode-btn" class="px-4 py-2 rounded-md font-medium text-gray-700 hover:bg-gray-100">Quiz</button>
+            </div>
+        </div>
+
+        <!-- Flashcard Section -->
+        <div id="flashcard-section" class="mb-12">
+            <div class="max-w-md mx-auto">
+                <div class="flashcard bg-white rounded-xl shadow-lg overflow-hidden h-64 cursor-pointer mx-auto" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner h-full w-full relative">
+                        <div class="flashcard-front h-full w-full flex items-center justify-center p-6 absolute">
+                            <h3 class="text-xl font-bold text-center">What weather pattern is most beneficial for wheat during its growth season?</h3>
+                        </div>
+                        <div class="flashcard-back h-full w-full flex items-center justify-center p-6 bg-purple-50 absolute">
+                            <p class="text-center">Wheat benefits from moderate rainfall (500-800mm) and cool temperatures (15-20°C) during growth, followed by dry weather for harvest.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                        <i data-feather="chevron-left"></i> Previous
+                    </button>
+                    <span class="self-center text-gray-600">1/10</span>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg">
+                        Next <i data-feather="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section (Hidden by default) -->
+        <div id="quiz-section" class="hidden bg-white rounded-xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Question 1 of 10</h2>
+                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Score: 0</span>
+            </div>
+            
+            <div class="text-lg mb-6">What is the best strategy to protect crops from unexpected frost?</div>
+            
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Cover with frost cloth</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Water heavily before sunset</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Apply fertilizer</button>
+                <button class="answer-btn bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-left transition">Harvest immediately</button>
+            </div>
+            
+            <div class="text-sm text-gray-500 mb-4 hidden" id="explanation">Frost cloth traps ground heat and protects plants from freezing temperatures, while watering can create ice that damages plants.</div>
+            
+            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition disabled:opacity-50" disabled>
+                Next Question <i data-feather="arrow-right" class="inline ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Learning Resources -->
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i data-feather="book-open" class="mr-2"></i> Weather Resources
+            </h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">NOAA Weather Patterns</h3>
+                    <p class="text-gray-600 mb-3">Understanding seasonal weather impacts on agriculture.</p>
+                    <a href="https://www.climate.gov/" target="_blank" class="text-purple-600 hover:underline inline-flex items-center">
+                        View Resources <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <h3 class="font-bold mb-2">El Niño and Farming</h3>
+                    <p class="text-gray-600 mb-3">How weather patterns affect crop yields.</p>
+                    <a href="https://www.ers.usda.gov/topics/in-the-news/el-nino-and-us-agriculture/" target="_blank" class="text-purple-600 hover:underline inline-flex items-center">
+                        Read Report <i data-feather="external-link" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i data-feather="sun" class="w-6 h-6 mr-2"></i>
+                        <span class="font-bold">FarmGalaxy</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Empowering farmers through knowledge</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-purple-400 transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-400 transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-400 transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+        
+        // Game mode toggle
+        const flashcardBtn = document.getElementById('flashcard-mode-btn');
+        const quizBtn = document.getElementById('quiz-mode-btn');
+        const flashcardSection = document.getElementById('flashcard-section');
+        const quizSection = document.getElementById('quiz-section');
+
+        flashcardBtn.addEventListener('click', () => {
+            flashcardSection.classList.remove('hidden');
+            quizSection.classList.add('hidden');
+            flashcardBtn.classList.add('bg-purple-600', 'text-white');
+            flashcardBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            quizBtn.classList.remove('bg-purple-600', 'text-white');
+        });
+
+        quizBtn.addEventListener('click', () => {
+            quizSection.classList.remove('hidden');
+            flashcardSection.classList.add('hidden');
+            quizBtn.classList.add('bg-purple-600', 'text-white');
+            quizBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.add('text-gray-700', 'hover:bg-gray-100');
+            flashcardBtn.classList.remove('bg-purple-600', 'text-white');
+        });
+        // Quiz data
+        const quizQuestions = [
+            {
+                question: "What is the best strategy to protect crops from unexpected frost?",
+                options: ["Cover with frost cloth", "Water heavily before sunset", "Apply fertilizer", "Harvest immediately"],
+                answer: "Cover with frost cloth",
+                explanation: "Frost cloth traps ground heat and protects plants from freezing temperatures, while watering can create ice that damages plants."
+            },
+            {
+                question: "Which weather phenomenon typically brings drought conditions to Australia?",
+                options: ["El Niño", "La Niña", "Monsoon", "Polar Vortex"],
+                answer: "El Niño",
+                explanation: "El Niño events often cause drier than average conditions across eastern Australia."
+            },
+            {
+                question: "What is the ideal temperature range for most vegetable crops?",
+                options: ["0-10°C", "10-20°C", "20-30°C", "30-40°C"],
+                answer: "20-30°C",
+                explanation: "Most vegetables grow best in moderate temperatures between 20-30°C."
+            },
+            {
+                question: "What weather condition is most likely to cause powdery mildew?",
+                options: ["Hot and dry", "Cool and wet", "Windy", "Freezing"],
+                answer: "Cool and wet",
+                explanation: "Powdery mildew thrives in cool, humid conditions with poor air circulation."
+            },
+            {
+                question: "Which crop benefits most from a Mediterranean climate?",
+                options: ["Wheat", "Rice", "Olives", "Bananas"],
+                answer: "Olives",
+                explanation: "Olive trees are well-adapted to Mediterranean climates with mild, wet winters and hot, dry summers."
+            },
+            {
+                question: "What is the minimum temperature danger point for tropical crops?",
+                options: ["0°C", "5°C", "10°C", "15°C"],
+                answer: "10°C",
+                explanation: "Tropical plants can suffer chilling injury below 10°C, even without freezing."
+            },
+            {
+                question: "Which weather pattern typically brings more rain to the southwestern US?",
+                options: ["El Niño", "La Niña", "Polar Vortex", "Trade Winds"],
+                answer: "El Niño",
+                explanation: "El Niño often brings wetter conditions to the southern US, including California."
+            },
+            {
+                question: "What wind speed defines a severe thunderstorm warning?",
+                options: ["40 mph", "58 mph", "75 mph", "100 mph"],
+                answer: "58 mph",
+                explanation: "The National Weather Service issues severe thunderstorm warnings for winds of 58 mph or greater."
+            },
+            {
+                question: "Which season is best for planting winter wheat?",
+                options: ["Spring", "Summer", "Fall", "Winter"],
+                answer: "Fall",
+                explanation: "Winter wheat is planted in fall, becomes dormant in winter, and resumes growth in spring."
+            },
+            {
+                question: "What weather condition helps pollinate corn?",
+                options: ["Rain", "Wind", "Fog", "Snow"],
+                answer: "Wind",
+                explanation: "Corn is wind-pollinated, relying on breeze to carry pollen from tassels to silks."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        // Initialize quiz
+        function showQuestion(index) {
+            const q = quizQuestions[index];
+            document.querySelector('#quiz-section h2:first-of-type').textContent = `Question ${index + 1} of ${quizQuestions.length}`;
+            document.querySelector('#quiz-section .text-lg').textContent = q.question;
+            
+            const options = document.querySelectorAll('.answer-btn');
+            options.forEach((btn, i) => {
+                btn.textContent = q.options[i];
+                btn.classList.remove('correct', 'wrong');
+                btn.disabled = false;
+            });
+            
+            document.getElementById('explanation').textContent = q.explanation;
+            document.getElementById('explanation').classList.add('hidden');
+            document.querySelector('#quiz-section button:last-of-type').disabled = true;
+        }
+
+        // Answer functionality
+        const answerBtns = document.querySelectorAll('.answer-btn');
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const currentQuiz = quizQuestions[currentQuestion];
+                if (this.textContent === currentQuiz.answer) {
+                    this.classList.add('correct');
+                    score++;
+                    document.querySelector('.bg-purple-100').textContent = `Score: ${score}`;
+                } else {
+                    this.classList.add('wrong');
+                    answerBtns.forEach(b => {
+                        if (b.textContent === currentQuiz.answer) b.classList.add('correct');
+                    });
+                }
+                
+                document.getElementById('explanation').classList.remove('hidden');
+                answerBtns.forEach(b => b.disabled = true);
+                document.querySelector('#quiz-section button:last-of-type').disabled = false;
+            });
+        });
+
+        // Next question functionality
+        document.querySelector('#quiz-section button:last-of-type').addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion < quizQuestions.length) {
+                showQuestion(currentQuestion);
+            } else {
+                // Quiz completed
+                alert(`Quiz completed! Your score: ${score}/${quizQuestions.length}`);
+                currentQuestion = 0;
+                score = 0;
+                document.querySelector('.bg-purple-100').textContent = 'Score: 0';
+                showQuestion(currentQuestion);
+            }
+        });
+
+        // Initialize first question
+        showQuestion(currentQuestion);
+</script>
+</body>
+</html>
